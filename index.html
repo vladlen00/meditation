@@ -20,14 +20,71 @@
     pointer-events:none;
   }
 
+  .header-wrap {
+    display:flex; flex-direction:column; align-items:center; gap:6px; width:100%;
+  }
   .title {
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300;
-    font-size:clamp(1.2rem,4.5vw,1.8rem);
-    letter-spacing:0.14em;
-    color:rgba(255,220,150,0.9);
-    text-shadow:0 2px 10px rgba(0,0,0,1), 0 0 25px rgba(255,140,30,0.5);
-    text-align:center; width:100%; padding:0 16px;
+    font-size:clamp(1.4rem,5.5vw,2rem);
+    color:#d4a574;
+    text-align:center;
+    text-shadow:0 2px 10px rgba(0,0,0,1), 0 0 25px rgba(0,0,0,0.6);
   }
+  .subtitle {
+    font-family:'Raleway',sans-serif; font-weight:300;
+    font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    color:#7a6f5a;
+    text-shadow:0 1px 4px rgba(0,0,0,0.9);
+  }
+
+  .info-block {
+    pointer-events:all;
+    width:100%; max-width:380px;
+    display:flex; flex-direction:column; align-items:center;
+    gap:10px; text-align:center;
+  }
+  .info-intro {
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:13px; color:#b8a888;
+    text-shadow:0 1px 4px rgba(0,0,0,0.9);
+  }
+  .info-list {
+    list-style:none; padding:0; margin:0;
+    display:flex; flex-direction:column; gap:4px;
+    font-size:13px; line-height:1.5; color:#d4c4a8;
+    text-shadow:0 1px 4px rgba(0,0,0,0.9);
+  }
+  .info-list li::before {
+    content:"·"; color:#d4a574; font-weight:700; margin-right:8px;
+  }
+  .info-details {
+    display:none;
+    margin-top:4px;
+    font-size:12.5px; line-height:1.6; color:#c8b890;
+    text-shadow:0 1px 4px rgba(0,0,0,0.9);
+  }
+  .info-details p { margin-bottom:8px; }
+  .info-details p:last-child { margin-bottom:0; }
+  .recommend {
+    margin-top:10px;
+    padding:10px 12px;
+    background:rgba(212,165,116,0.08);
+    border:1px solid rgba(212,165,116,0.25);
+    border-radius:10px;
+    font-size:12.5px; line-height:1.5; color:#c8b890;
+  }
+  .info-toggle {
+    background:none; border:none; cursor:pointer;
+    color:#a89070;
+    font-family:'Raleway',sans-serif; font-size:12px;
+    padding:6px 12px;
+    text-shadow:0 1px 4px rgba(0,0,0,0.9);
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  body.details-open .info-details { display:block; }
+  body.session-active .info-block,
+  body.session-active .subtitle { display:none; }
 
   .bottom {
     pointer-events:all;
@@ -153,7 +210,26 @@
 </audio>
 
 <div class="screen">
-  <div class="title">Медитация глубокого расслабления</div>
+  <div class="header-wrap">
+    <div class="title">Глубокое расслабление</div>
+    <div class="subtitle">15 МИН · ДНЕВНАЯ</div>
+  </div>
+
+  <div class="info-block" id="infoBlock">
+    <div class="info-intro">Медитация для тех, кто хочет:</div>
+    <ul class="info-list">
+      <li>Быстро восстановить силы среди дня</li>
+      <li>Снять накопившееся напряжение в теле</li>
+      <li>Перезагрузиться в течение дня</li>
+    </ul>
+    <div class="info-details">
+      <p>Эта практика приведёт тебя из состояния усталости к глубокому телесному покою, бодрости и наполненности.</p>
+      <p>Это базовая медитация, с которой мы рекомендуем начинать.</p>
+      <div class="recommend">🔁 Делать минимум 30 дней. Можно чередовать с другими медитациями канала.</div>
+    </div>
+    <button class="info-toggle" id="infoToggle" type="button">↓ Подробнее</button>
+  </div>
+
   <div class="bottom">
     <button class="btn" id="mainBtn">Старт</button>
     <div class="progress-wrap" id="pw">
@@ -339,11 +415,13 @@ class Spark {
 }
 const sparks = Array.from({length:70},()=>new Spark());
 let t=0;
+let flowerScale = 1, flowerTarget = 1;
 
 function drawFrame() {
   t+=0.006;
   ctx.fillStyle='rgba(8,3,0,0.22)'; ctx.fillRect(0,0,W,H);
-  const R=S*0.38;
+  flowerScale += (flowerTarget - flowerScale) * 0.08;
+  const R=S*0.38*flowerScale;
   ctx.save(); ctx.globalCompositeOperation='screen';
   const halo=ctx.createRadialGradient(cx,cy,0,cx,cy,R*1.4);
   halo.addColorStop(0,`rgba(160,60,0,${0.12+0.05*Math.sin(t*0.7)})`);
@@ -391,6 +469,13 @@ const repeatBtn = document.getElementById('repeatBtn');
 const track     = document.getElementById('progressTrack');
 const skipBack  = document.getElementById('skipBack');
 const skipFwd   = document.getElementById('skipFwd');
+const infoToggle = document.getElementById('infoToggle');
+
+infoToggle.addEventListener('click', function() {
+  const open = document.body.classList.toggle('details-open');
+  flowerTarget = open ? 0.75 : 1;
+  infoToggle.textContent = open ? '↑ Свернуть' : '↓ Подробнее';
+});
 
 let mode = 'start';
 let rafAudio = null;
@@ -448,6 +533,7 @@ skipFwd.addEventListener('click',  () => skip(15));
 mainBtn.addEventListener('click', function() {
   if (mode === 'start') {
     mode = 'playing'; elapsed = 0; lastTs = null;
+    document.body.classList.add('session-active');
     pw.style.display = 'flex';
     mainBtn.textContent = 'Пауза';
     audio.currentTime = 0; audio.volume = 0;
@@ -470,6 +556,7 @@ repeatBtn.addEventListener('click', function() {
   fin.classList.remove('show');
   pf.style.width='0%'; pw.style.display='none';
   mainBtn.textContent='Старт';
+  document.body.classList.remove('session-active');
 });
 
 
