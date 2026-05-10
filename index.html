@@ -42,45 +42,61 @@
     width:100%; max-width:380px;
     display:flex; flex-direction:column; align-items:center;
     gap:10px; text-align:center;
-    background:rgba(0,0,0,0.45);
+    background:rgba(0,0,0,0.78);
     backdrop-filter:blur(4px);
     -webkit-backdrop-filter:blur(4px);
     border-radius:18px;
     padding:18px 20px;
   }
   .info-intro {
-    font-family:'Cormorant Garamond',serif; font-style:italic;
-    font-size:13px; color:#b8a888;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:14px;
+    color:#d4a574;
+    font-weight:400;
   }
   .info-list {
     list-style:none; padding:0; margin:0;
-    display:flex; flex-direction:column; gap:4px;
-    font-size:13px; line-height:1.5; color:#d4c4a8;
+    display:flex; flex-direction:column; gap:7px;
+    font-family:'Raleway',sans-serif;
+    font-weight:500;
+    font-size:14px; line-height:1.4;
+    color:#e8dcc0;
   }
   .info-list li::before {
-    content:"·"; color:#d4a574; font-weight:700; margin-right:8px;
+    content:"·"; color:#d4a574;
+    font-weight:700; margin-right:8px;
   }
   .info-details {
     display:none;
     margin-top:4px;
-    font-size:12.5px; line-height:1.6; color:#c8b890;
+    font-family:'Raleway',sans-serif;
+    font-weight:400;
+    font-size:13px; line-height:1.6;
+    color:#d8ccb0;
   }
   .info-details p { margin-bottom:8px; }
   .info-details p:last-child { margin-bottom:0; }
   .recommend {
     margin-top:10px;
     padding:10px 12px;
-    background:rgba(212,165,116,0.08);
-    border:1px solid rgba(212,165,116,0.25);
+    background:rgba(212,165,116,0.1);
+    border:1px solid rgba(212,165,116,0.3);
     border-radius:10px;
-    font-size:12.5px; line-height:1.5; color:#c8b890;
+    font-family:'Raleway',sans-serif;
+    font-weight:400;
+    font-size:13px; line-height:1.5;
+    color:#e0d4b8;
   }
   .info-toggle {
     background:none; border:none; cursor:pointer;
-    color:#a89070;
-    font-family:'Raleway',sans-serif; font-size:12px;
-    padding:6px 12px;
+    color:#d4a574;
+    font-family:'Raleway',sans-serif;
+    font-weight:500;
+    font-size:13px;
+    padding:8px 14px;
     -webkit-tap-highlight-color:transparent;
+    letter-spacing:0.04em;
   }
 
   body.details-open .info-details { display:block; }
